@@ -40,8 +40,8 @@
     <parameter name="scope" value="Application"/>
     <parameter name="className" value="org.apache.axis.monitor.SOAPMonitorService"/>
   </service>
-    <service name="HelloWorld" provider="java:RPC" style="document" use="literal">
-        <parameter name="className" value="example.HelloWorld"/>
+    <service name="TestToolService" provider="java:RPC" style="document" use="literal">
+        <parameter name="className" value="at.oefg1880.ws.server.TestToolService"/>
         <parameter name="allowedMethods" value="*"/>
         <parameter name="scope" value="Application"/>
         <namespace>http://example</namespace>
