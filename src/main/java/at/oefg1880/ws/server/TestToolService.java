@@ -13,8 +13,8 @@ import javax.xml.ws.Endpoint;
 @WebService()
 public class TestToolService {
   @WebMethod
-  public String sayHelloWorldFrom(String from) {
-    String result = "Hello, world, from " + from;
+  public String getFragebogen(String fragebogen) {
+    String result = "Hello, world, fragebogen " + fragebogen;
     System.out.println(result);
     return result;
   }

@@ -4,30 +4,30 @@
 Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
   <schema elementFormDefault="qualified" targetNamespace="http://server.ws.oefg1880.at" xmlns="http://www.w3.org/2001/XMLSchema">
-   <element name="from" type="xsd:string"/>
-   <element name="sayHelloWorldFromReturn" type="xsd:string"/>
+   <element name="fragebogen" type="xsd:string"/>
+   <element name="getFragebogenReturn" type="xsd:string"/>
   </schema>
  </wsdl:types>
 
-   <wsdl:message name="sayHelloWorldFromRequest">
+   <wsdl:message name="getFragebogenRequest">
 
-      <wsdl:part element="impl:from" name="from"/>
+      <wsdl:part element="impl:fragebogen" name="fragebogen"/>
 
    </wsdl:message>
 
-   <wsdl:message name="sayHelloWorldFromResponse">
+   <wsdl:message name="getFragebogenResponse">
 
-      <wsdl:part element="impl:sayHelloWorldFromReturn" name="sayHelloWorldFromReturn"/>
+      <wsdl:part element="impl:getFragebogenReturn" name="getFragebogenReturn"/>
 
    </wsdl:message>
 
    <wsdl:portType name="TestToolService">
 
-      <wsdl:operation name="sayHelloWorldFrom" parameterOrder="from">
+      <wsdl:operation name="getFragebogen" parameterOrder="fragebogen">
 
-         <wsdl:input message="impl:sayHelloWorldFromRequest" name="sayHelloWorldFromRequest"/>
+         <wsdl:input message="impl:getFragebogenRequest" name="getFragebogenRequest"/>
 
-         <wsdl:output message="impl:sayHelloWorldFromResponse" name="sayHelloWorldFromResponse"/>
+         <wsdl:output message="impl:getFragebogenResponse" name="getFragebogenResponse"/>
 
       </wsdl:operation>
 
@@ -37,17 +37,17 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 
-      <wsdl:operation name="sayHelloWorldFrom">
+      <wsdl:operation name="getFragebogen">
 
          <wsdlsoap:operation soapAction=""/>
 
-         <wsdl:input name="sayHelloWorldFromRequest">
+         <wsdl:input name="getFragebogenRequest">
 
             <wsdlsoap:body use="literal"/>
 
          </wsdl:input>
 
-         <wsdl:output name="sayHelloWorldFromResponse">
+         <wsdl:output name="getFragebogenResponse">
 
             <wsdlsoap:body use="literal"/>
 
@@ -61,7 +61,7 @@ Built on Apr 22, 2006 (06:55:48 PDT)-->
 
       <wsdl:port binding="impl:TestToolServiceSoapBinding" name="TestToolService">
 
-         <wsdlsoap:address location="http://localhost:8080/services/TestToolService"/>
+         <wsdlsoap:address location="http://localhost:8080/services/at/oefg1880/ws/server/TestToolService"/>
 
       </wsdl:port>
 
