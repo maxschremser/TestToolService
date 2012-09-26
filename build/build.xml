@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="TestToolService" basedir="." default="war" xmlns:ivy="antlib:org.apache.ivy.ant">
+    <!--
+    // Author: DI (FH) Maximilian Schremser
+    // Date: 03.02.2010
+    // Description: Build Script for creating the TestToolService
+    -->
+    <!--
+      TARGET: init
+    -->
+    <target name="init" description="init">
+        <property file="build.properties"/>
+        <property name="ivy.dir" value="${BASE_DIR}/target"/>
+        <property name="ivy.lib.dir" value="${ivy.dir}/[conf]"/>
+        <property name="ivy.dep.file" value="${BUILD_DIR}/ivy.xml"/>
+    </target>
+
+
+    <target name="clean" description="clean up" depends="init">
+        <echo>Clean Environment</echo>
+        <delete dir="${CLASSES_RESOURCE_DIR}"/>
+        <delete dir="${CLASSES_DIR}"/>
+        <delete dir="${TEST_CLASSES_DIR}"/>
+        <delete dir="${APP_LIB_DIR}"/>
+        <delete dir="${APP_DIR}"/>
+        <delete dir="${BIN_DIR}"/>
+        <delete dir="${LIB_DIR}"/>
+        <delete dir="${META_DIR}"/>
+        <delete dir="${WAR_DIR}"/>
+        <delete dir="${TARGET_DIR}"/>
+        <delete dir="${RESULT_DIR}"/>
+    </target>
+
+    <target name="zip" unless="compile.prepare" depends="clean">
+        <zip destfile='../../${APP_NAME}-all-${VERSION}.${MAJOR}.${MINOR}.zip'>
+            <zipfileset dir='../../${APP_NAME}' includes="**/**"/>
+        </zip>
+    </target>
+
+    <target name="compile.prepare" unless="compile.prepare" depends="zip">
+        <mkdir dir="${CLASSES_DIR}"/>
+        <mkdir dir="${TEST_CLASSES_DIR}"/>
+        <mkdir dir="${CLASSES_RESOURCE_DIR}"/>
+        <mkdir dir="${LIB_DIR}"/>
+        <mkdir dir="${WAR_DIR}"/>
+        <mkdir dir="${TARGET_DIR}"/>
+
+        <path id="compile.classpath">
+            <fileset dir="${COMPILE_TARGET}">
+                <include name="**/*.jar"/>
+            </fileset>
+        </path>
+
+        <path id="test.classpath">
+            <fileset dir="${TEST_TARGET}">
+                <include name="**/*.jar"/>
+            </fileset>
+            <pathelement location="${TEST_CLASSES_DIR}"/>
+            <pathelement location="${CLASSES_DIR}"/>
+        </path>
+
+        <echo>resolve with ivy</echo>
+
+        <ivy:settings file="../../PC-TestTool/build/ivysettings.xml"/>
+        <ivy:retrieve sync="true" pattern="${ivy.lib.dir}/[artifact]-[revision].[ext]" type="jar"/>
+    </target>
+
+    <target name="compile" description="compile sources" depends="compile.prepare">
+        <javac srcdir="${SRC_DIR}" classpathref="compile.classpath" destdir="${CLASSES_DIR}"/>
+
+        <propertyfile file="${SRC_RESOURCE_DIR}/version.properties">
+            <entry key="VERSION" value="${VERSION}"/>
+            <entry key="MAJOR" value="${MAJOR}"/>
+            <entry key="MINOR" value="${MINOR}"/>
+        </propertyfile>
+
+        <copy todir="${CLASSES_RESOURCE_DIR}">
+            <fileset dir="${SRC_RESOURCE_DIR}">
+                <include name="**/*.properties"/>
+                <include name="**/*.gif"/>
+            </fileset>
+        </copy>
+        <copy todir="${CLASSES_DIR}">
+            <fileset dir="${SRC_DIR}">
+                <include name="**/*.properties"/>
+                <include name="**/*.wsdl"/>
+            </fileset>
+        </copy>
+        <copy file="${SRC_DIR}/at/oefg1880/ws/server/TestToolService.wsdl" todir="${WEB_INF_WSDL_DIR}"/>
+    </target>
+
+    <target name="jar" description="generate jar" depends="compile">
+        <jar jarfile="${LIB_DIR}/${JAR_FILE}" basedir="${CLASSES_DIR}" includes="**/**">
+            <manifest>
+                <attribute name="Built-By" value="${user.name}"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="war" description="generate war" depends="jar">
+        <tstamp>
+            <format property="dt" pattern="yyyy-MM-dd HH:mm:ss"/>
+        </tstamp>
+
+        <copy todir="${WEB_INF_LIB_DIR}">
+            <fileset dir="${LIB_DIR}"/>
+            <fileset dir="${COMPILE_TARGET}"/>
+        </copy>
+
+        <war warfile="${WAR_DIR}/${APP_NAME}.war" needxmlfile='false'>
+            <fileset dir="${WEB_DIR}"/>
+        </war>
+
+    </target>
+
+</project>
