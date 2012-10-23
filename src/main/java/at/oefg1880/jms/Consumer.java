@@ -2,6 +2,7 @@ package at.oefg1880.jms;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.log4j.Logger;
 
 import javax.jms.*;
 
@@ -13,6 +14,7 @@ import javax.jms.*;
  * To change this template use File | Settings | File Templates.
  */
 public class Consumer {
+    private static Logger log = Logger.getLogger(Consumer.class);
     private static String defaultUrl = ActiveMQConnection.DEFAULT_BROKER_URL;
     private static String subject = "TESTTOOL";
 
@@ -37,7 +39,7 @@ public class Consumer {
 
         if (message instanceof TextMessage) {
             TextMessage textMessage = (TextMessage) message;
-            System.out.println("Message received: " + textMessage.getText());
+            log.debug("Message received: " + textMessage.getText());
         }
 
         connection.close();
